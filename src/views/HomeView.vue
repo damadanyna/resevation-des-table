@@ -1,8 +1,14 @@
 <template>
   <div class="flex flex-col w-full h-full">
-    <div class=" px-4 text-3xl py-5 text-gray-500">
-      <div class=" flex flex-row mt-7">
-          <div :class="item.border"  class=" bg-gray-100 cursor-pointer py-3 pb-4 w-56 mr-10 shadowing rounded-md transform hover:scale-110" v-for="item,i in liste_boite" :key="i">
+    <div class="flex w-full flex-col bg-white shadow-lg ">
+      <div class=" py-4"></div>
+      <div class=" px-3 flex flex-row py-3 justify-between">
+        <div class=" text-2xl text-gray-500 font-medium">Tableau de bord</div>
+      </div>
+    </div>
+    <div class="  justify-center flex w-full text-3xl py-5 text-gray-500">
+      <div class=" flex flex-row justify-between w-full px-11  mt-7 mr-5">
+          <div :class="item.border"  class=" bg-gray-100 cursor-pointer py-3 pb-4 w-56   shadowing rounded-md transform hover:scale-110" v-for="item,i in liste_boite" :key="i">
               <span :class="item.text_color" class=" mt-5 uppercase ml-4 font-medium text-base">{{item.text}}</span>
               <div class="flex justify-center">
                 <div>
@@ -15,32 +21,35 @@
           </div>
       </div>
     </div>
-      <div class=" w-full flex  px-5 h-fulls overflow-y-auto ">
-        <div class=" mt-5 grid grid-cols-7  ">
-          <div class=" text-gray-900  " v-for="item,i in liste_days" :key="i">
+      <div  v-if="i>0" @click="precedant()" class=" absolute top_left transform cursor-pointer hover:scale-150 my_hover">
+          <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m14 7-5 5 5 5V7z" /></svg>
+      </div>
+      <div class=" w-full flex justify-center  px-5 h-fulls overflow-y-auto ">
+      <table>
+        <tr>
+          <th v-for="item,i in liste_days" :key="i">
             <div :class="now_day==item.day?'bg-blue-400':'bg-gray-100'" class=" w-36  font-medium  px-2 ml-9 margining py-1" >
               <div class="flex w-full justify-end ">
                 <span class=" text-green-600 ml-9 text-sm  rounded-full  ">{{item.day<10?"0"+item.day:item.day}}</span>
               </div>
               <span class="text-blue-600  text-xl  ">{{get_text(item)}}</span>
             </div>
-          </div>
-          <div class=" marting_top text-gray-900 " v-for="item,i in 90" :key="i">
-            <div class="  text-gray-500   bg-gray-100 ml-2 margining py-1" >
-              <span class=" flex justify-end text-gray-400 text-xs px-4">{{i+1}}</span>
-              <span class=" flex px-3 text-gray-800">Libre</span>
+          </th>
+        </tr>
+        <tr  v-for="items,l in 16" :key="l">
+          <td  v-for="item,i in liste_days" :key="i" >
+            <div  :class="now_day==item.day?'bg-blue-400':'bg-gray-100'" class="  text-gray-500 flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
+              <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h:00</span>
+              <span v-if="get_child(item.day,l)==true" class=" px-2 text-white rounded-md flex bg-red-500 w-full" >izy</span>
+              <span v-else class="  px-3 text-gray-300">Libre</span>
             </div>
-          </div>
-        </div>
-        <div  @click="precedant()" class=" absolute top_left transform cursor-pointer hover:scale-150 my_hover">
-          <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m14 7-5 5 5 5V7z" /></svg>
-        </div>
-        <div  @click="suivant()"  class=" absolute top_right transform cursor-pointer hover:scale-150 my_hover">
+          </td>
+        </tr>
+      </table>
+        <div v-if="i<5" @click="suivant()"  class=" absolute top_right transform cursor-pointer hover:scale-150 my_hover">
           <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m10 17 5-5-5-5v10z" /></svg>
         </div>
-        
       </div>
-    
   </div>
 </template>
 
@@ -97,13 +106,15 @@ export default {
         },
       ],
       i:0,
-      liste_days:calendar.weeks[this.i],
-      now_day:calendar.today.toString().split(" ")[2]
+      liste_days:calendar.weeks[0],
+      now_day:calendar.today.toString().split(" ")[2],
+      existes:[[2,4],[6,2],[31,5],[4,10]],
     }
   },
   methods:{
     get_text(item){
-      console.log(item)
+      console.log(this.existes.includes(2))
+
       return item.date.toString().split(" ")[0]
     },
     suivant(){
@@ -113,13 +124,26 @@ export default {
     precedant(){
       this.i--
       this.liste_days=calendar.weeks[this.i]
+    },
+    get_child(day,hours){
+      for (let i = 0; i < this.existes.length; i++) {
+        const element = this.existes[i];
+        if(element[0]==day && element[1]==hours){
+          return true
+        }
+      }
+     return false
     }
+   /*  set_canlendar(day,hour,moth){
+      console.log(calendar)
+    } */
   }, 
   mounted(){
     //console.log()
     
     //console.log( calendar.today)
-    console.log( calendar.today.toString().split(" ")[2])
+    console.log( calendar.weeks)
+    /* console.log( calendar.today.toString().split(" ")[2]) */
   }
 }
 </script>
