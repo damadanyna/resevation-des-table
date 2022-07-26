@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row h-screen w-screen overflow-y-hidden ">
+  <div class="flex flex-row h-screen w-screen  overflow-hidden">
     <nav_bar class=" overflow-hidden z-40 w-2/4 md:w-2/6 lg:w-1/5 "/>
     
     <div class=" z-20 w-3/4 lg:w-4/5 xl:w-full md:w-4/5 h-full flex flex-col">  
@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .footer{
   color: gray;
 }

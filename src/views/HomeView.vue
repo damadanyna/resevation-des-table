@@ -3,7 +3,7 @@
     <div class="flex w-full flex-col bg-white shadow-lg ">
       <div class=" py-4"></div>
       <div class=" px-3 flex flex-row py-3 justify-between">
-        <div class=" text-2xl text-gray-500 font-medium">Tableau de bord</div>
+        <div class=" text-2xl text-gray-600 font-medium">Tableau de bord</div>
       </div>
     </div>
     <div class="  justify-center flex w-full text-3xl py-5 text-gray-500">
@@ -24,7 +24,7 @@
       <div  v-if="i>0" @click="precedant()" class=" absolute top_left transform cursor-pointer hover:scale-150 my_hover">
           <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m14 7-5 5 5 5V7z" /></svg>
       </div>
-      <div class=" w-full flex justify-center  px-5 h-fulls overflow-y-auto ">
+      <div class=" w-full flex justify-center px-5 h-fulls overflow-y-auto ">
       <table>
         <tr>
           <th v-for="item,i in liste_days" :key="i">
@@ -37,10 +37,10 @@
           </th>
         </tr>
         <tr  v-for="items,l in 16" :key="l">
-          <td  v-for="item,i in liste_days" :key="i" >
+          <td  v-for="item,i in liste_days" :key="i" class=" h-full" >
             <div  :class="now_day==item.day?'bg-blue-400':'bg-gray-100'" class="  text-gray-500 flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
-              <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h:00</span>
-              <span v-if="get_child(item.day,l)==true" class=" px-2 text-white rounded-md flex bg-red-500 w-full" >izy</span>
+              <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h</span>
+              <span v-if="get_child(item.day,l)==true" class=" px-2 py-1 text-white rounded-md flex bg-red-500 w-full uppercase font-medium text-xs" >Reservé</span>
               <span v-else class="  px-3 text-gray-300">Libre</span>
             </div>
           </td>
@@ -113,8 +113,6 @@ export default {
   },
   methods:{
     get_text(item){
-      console.log(this.existes.includes(2))
-
       return item.date.toString().split(" ")[0]
     },
     suivant(){
@@ -134,16 +132,9 @@ export default {
       }
      return false
     }
-   /*  set_canlendar(day,hour,moth){
-      console.log(calendar)
-    } */
   }, 
   mounted(){
-    //console.log()
-    
-    //console.log( calendar.today)
-    console.log( calendar.weeks)
-    /* console.log( calendar.today.toString().split(" ")[2]) */
+    console.log( calendar)
   }
 }
 </script>
