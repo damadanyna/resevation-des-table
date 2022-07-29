@@ -8,17 +8,17 @@
     </div>
     <div class="  justify-center flex w-full text-3xl py-5 text-gray-500">
       <div class=" flex flex-row justify-between w-full px-11  mt-7 mr-5">
-          <div :class="item.border"  class=" bg-gray-100 cursor-pointer py-3 pb-4 w-56   shadowing rounded-md transform hover:scale-110" v-for="item,i in liste_boite" :key="i">
+          <router-link to="/client" :class="item.border" @click="$store.state.params=item.value"  class=" bg-gray-100 cursor-pointer py-3 pb-4 w-56   shadowing rounded-md transform hover:scale-110" v-for="item,i in liste_boite" :key="i">
               <span :class="item.text_color" class=" mt-5 uppercase ml-4 font-medium text-base">{{item.text}}</span>
               <div class="flex justify-center">
                 <div>
-                  <span v-if="item.nombre" class=" text-5xl ">{{item.nombre}}</span>
+                  <span v-if="item.nombre" class=" text-5xl " v-text="this.set_number(item.value)"></span>
                 </div>
                 <div :class="item.round==true?'rounded-full bg-gray-300 ':''"  class=" relative h-6 mt-3  flex justify-center"> 
                   <svg :class=" item.width +' '+item.height"   viewBox="0 0 24 24"><path :class="item.round==true?'fill-current text-white ':'fill-current text-gray-300'" class="  " :d="item.icon" /></svg>
                 </div>
               </div>
-          </div>
+          </router-link>
       </div>
     </div>
       <div  v-if="i>0" @click="precedant()" class=" absolute top_left transform cursor-pointer hover:scale-150 my_hover">
@@ -73,7 +73,8 @@ export default {
           round:true,
           width:"w-6",
           height:"h-6",
-          icon:"M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7z"
+          icon:"M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7z",
+          value:false
         },
         {
           text:"reservation annuler",
@@ -83,7 +84,8 @@ export default {
           round:true,
           width:"w-6",
           height:"h-6",
-          icon:"M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+          icon:"M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z",
+          value:true
         },
         {
           text:"total des reservations",
@@ -93,7 +95,8 @@ export default {
           round:false,
           width:"w-6",
           height:"h-6",
-          icon:"m3 22 1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2m15 7H6V7h12m0 6H6v-2h12m0 6H6v-2h12v2z"
+          icon:"m3 22 1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2m15 7H6V7h12m0 6H6v-2h12m0 6H6v-2h12v2z",
+          value:null,
         },
         {
           text:"Reserver une Table",
@@ -131,10 +134,22 @@ export default {
         }
       }
      return false
+    },
+    set_number(value){
+      var res= this.$store.state.data.clients;
+      var temp=[];
+      var k=0;
+      for (let i = 0; i < res.length; i++) {
+        const element = res[i];
+        if(element.etat!=value){
+          temp[k]=element;
+          k++
+        }
+      }
+      return temp.length
     }
   }, 
   mounted(){
-    console.log( calendar)
   }
 }
 </script>

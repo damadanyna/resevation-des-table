@@ -11,16 +11,23 @@
         <span class=" text-2xl">all right served 2022</span>  
       </div>
     </div>
+    
   </div>
 </template>
 
 <script>
 import nav_bar from "./components/nav_bar.vue";
+
 export default {
   components:{nav_bar},
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  mounted(){
+    if(window.localStorage.getItem('mi')){
+      this.$store.state.data=JSON.parse(window.localStorage.getItem('mi'))
+    }
   }
 }
 </script>
