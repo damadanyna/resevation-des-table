@@ -8,7 +8,7 @@
         <div class=" flex flex-row">
           <div @click=" show_popup=true" class=" z-30  px-2 flex ml-6 flex-col cursor-pointer items-center">
             <svg :class=" show_popup==true?'transform scale-150 ':''" class=" w-4" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-8.92 12.58L11.5 17l5-5-5-5-1.42 1.41L12.67 11H3v2h9.67l-2.59 2.58z" /></svg>
-            <span :class=" show_popup==true?'transform scale-125 text-white ':''" class=" text-xs">Dama Dany</span>
+            <span :class=" show_popup==true?'transform scale-125 text-white ':''" class=" text-xs">Wahababdel</span>
           </div>
         </div>
       </div>
@@ -38,10 +38,10 @@
 
   <div v-if="show_popup==true" @click=" show_popup=false" class="  duration-300 z-50 w-full h-full blures absolute top-0 left-0">
     <div class="flex flex-col absolute px-4 py-6 right-3 top-24 justify-between rounded-xl bg-white w-56 ">
-      <span class="  cursor-pointer py-1  text-blue-600 border-b border-gray-400"> damadanyna@gmail.com</span>
+      <span class="  cursor-pointer py-1  text-blue-600 border-b border-gray-400"> wahababdel748@gmail.com</span>
       <div class=" flex flex-row cursor-pointer">
         <svg class=" w-7" viewBox="0 0 24 24"><path class=" fill-current text-red-600" d="m16.56 5.44-1.45 1.45A5.969 5.969 0 0 1 18 12a6 6 0 0 1-6 6 6 6 0 0 1-6-6c0-2.17 1.16-4.06 2.88-5.12L7.44 5.44A7.961 7.961 0 0 0 4 12a8 8 0 0 0 8 8 8 8 0 0 0 8-8c0-2.72-1.36-5.12-3.44-6.56M13 3h-2v10h2" /></svg>
-        <span class="  py-1 text-slate-500" @click=" show_popup=false"> Se Deconnecter ?</span> 
+        <span class="  py-1 text-slate-500" @click="log_out()"> Se Deconnecter ?</span> 
       </div>
     </div>
   </div>
@@ -84,6 +84,13 @@ export default {
         },
       ],
       show_popup:false,
+    }
+  },
+  methods:{
+    log_out(){
+      this.$store.state.data.user.logged=false
+      window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
+      this.show_popup=false
     }
   }
 }

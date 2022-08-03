@@ -1,14 +1,23 @@
 <template>
   <div class="flex flex-col w-full h-full">
-    <div class="flex w-full flex-col bg-white shadow-lg ">
-      <div class=" py-4"></div>
-      <div class=" px-3 flex flex-row py-3 justify-between">
-        <div class=" text-2xl text-gray-600 font-medium">Tableau de bord</div>
+    <div class="flex w-full flex-col bg-white z-30 shadow-lg ">
+      <div class=" py-5"></div>
+      <div class=" px-3 flex flex-row py-2 justify-between">
+        <div class=" text-2xl text-stone-600 font-medium">Tableau de bord</div>
+        <div class=" flex flex-row">
+          <div @click=" show_popup=true" class=" z-30  px-2 flex ml-6 flex-col cursor-pointer items-center">
+            <svg :class=" show_popup==true?'transform scale-150 ':''" class=" w-4" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-8.92 12.58L11.5 17l5-5-5-5-1.42 1.41L12.67 11H3v2h9.67l-2.59 2.58z" /></svg>
+            <span :class=" show_popup==true?'transform scale-125 text-white ':''" class=" text-xs">Wahababdel</span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="  justify-center flex w-full text-3xl py-5 text-gray-500">
-      <div class=" flex flex-row justify-between w-full px-11  mt-7 mr-5">
-          <router-link to="/client" :class="item.border" @click="$store.state.params=item.value"  class=" bg-gray-100 cursor-pointer py-3 pb-4 w-56   shadowing rounded-md transform hover:scale-110" v-for="item,i in liste_boite" :key="i">
+    <div class=" flex w-full justify-end z-50">
+      <span class=" bg-green-500 rounded-b-xl text-white py-1 text-3xl px-6">{{liste_days[1].date.toString().split(" ")[1] +" "+liste_days[1].date.toString().split(" ")[3]}}</span>
+    </div>
+    <div class="  justify-center flex w-full text-3xl pb-5 text-gray-500">
+      <div class=" flex flex-row justify-between w-full px-11  mt-3 mr-5">
+          <router-link :to="item.url" :class="item.border" @click="$store.state.params=item.value"  class=" bg-gray-100 cursor-pointer py-3 pb-4 w-56   shadowing rounded-md transform hover:scale-110" v-for="item,i in liste_boite" :key="i">
               <span :class="item.text_color" class=" mt-5 uppercase ml-4 font-medium text-base">{{item.text}}</span>
               <div class="flex justify-center">
                 <div>
@@ -25,31 +34,48 @@
           <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m14 7-5 5 5 5V7z" /></svg>
       </div>
       <div class=" w-full flex justify-center px-5 h-fulls overflow-y-auto ">
-      <table>
+      <table id="kinda">
         <tr>
           <th v-for="item,i in liste_days" :key="i">
-            <div :class="now_day==item.day?'bg-blue-400':'bg-gray-100'" class=" w-36  font-medium  px-2 ml-9 margining py-1" >
+            <div :class="now_day==item.day?' font-bold text-xl py-0 bg-blue-200':' py-1 font-medium  bg-gray-100'" class=" w-36   px-2 ml-9 margining" >
               <div class="flex w-full justify-end ">
                 <span class=" text-green-600 ml-9 text-sm  rounded-full  ">{{item.day<10?"0"+item.day:item.day}}</span>
               </div>
-              <span class="text-blue-600  text-xl  ">{{get_text(item)}}</span>
+              <span :class="now_day==item.day?' text-3xl ':'text-xl '" class="text-blue-600   ">{{get_text(item)}}</span>
             </div>
           </th>
         </tr>
         <tr  v-for="items,l in 16" :key="l">
           <td  v-for="item,i in liste_days" :key="i" class=" h-full" >
-            <div  :class="now_day==item.day?'bg-blue-400':'bg-gray-100'" class="  text-gray-500 flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
+            <div  :class="now_day==item.day?' bg-blue-200 ':'bg-gray-100 '" class="   flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
               <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h</span>
-              <span v-if="get_child(item.day,l)==true" class=" px-2 py-1 text-white rounded-md flex bg-red-500 w-full uppercase font-medium text-xs" >Reservé</span>
-              <span v-else class="  px-3 text-gray-300">Libre</span>
+              <span v-if="get_child(item.day,l,item.monthIndex+1)==true" class=" px-2 py-1 text-white rounded-l-md flex bg-orange-600 w-full uppercase font-medium text-xs" >Reservé</span>
+              <span v-else :class="now_day==item.day?' px-3 text-white ':'bg-gray-100 text-stone-300'" >Libre</span>
             </div>
           </td>
         </tr>
       </table>
-        <div v-if="i<5" @click="suivant()"  class=" absolute top_right transform cursor-pointer hover:scale-150 my_hover">
+        <div v-if="i<taille" @click="suivant()"  class=" absolute top_right transform cursor-pointer hover:scale-150 my_hover">
           <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m10 17 5-5-5-5v10z" /></svg>
         </div>
       </div>
+  </div>
+  <div v-if="show_popup == true" @click="show_popup = false" class="duration-300 z-50 w-full h-full blures absolute top-0 left-0">
+    <div class="flex flex-col absolute px-4 py-6 right-3 top-24 justify-between rounded-xl bg-white w-56">
+      <span class="cursor-pointer py-1 text-blue-600 border-b border-gray-400"> wahababdel748@gmail.com</span>
+      <router-link class="cursor-pointer py-1 flex flex-row" to="/">
+        <svg class="w-7" viewBox="0 0 24 24">
+          <path class="fill-current text-slate-500" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+        </svg>
+        <span class="text-slate-500">Page de bienvenue</span>
+      </router-link>
+      <div class="flex flex-row cursor-pointer">
+        <svg class="w-7" viewBox="0 0 24 24">
+          <path class="fill-current text-red-600" d="m16.56 5.44-1.45 1.45A5.969 5.969 0 0 1 18 12a6 6 0 0 1-6 6 6 6 0 0 1-6-6c0-2.17 1.16-4.06 2.88-5.12L7.44 5.44A7.961 7.961 0 0 0 4 12a8 8 0 0 0 8 8 8 8 0 0 0 8-8c0-2.72-1.36-5.12-3.44-6.56M13 3h-2v10h2"/>
+        </svg>
+        <span class="py-1 text-slate-500"  @click="log_out()"> Se Deconnecter ?</span >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,9 +83,7 @@
 // @ is an alias to /src
 const {JsonCalendar}=require('json-calendar')
 const calendar=new JsonCalendar()
-
 export default {
-
   components: {
   },
   data(){
@@ -74,7 +98,8 @@ export default {
           width:"w-6",
           height:"h-6",
           icon:"M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7z",
-          value:false
+          value:false,
+          url:"/client"
         },
         {
           text:"reservation annuler",
@@ -85,7 +110,8 @@ export default {
           width:"w-6",
           height:"h-6",
           icon:"M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z",
-          value:true
+          value:true,
+          url:"/client"
         },
         {
           text:"total des reservations",
@@ -97,6 +123,7 @@ export default {
           height:"h-6",
           icon:"m3 22 1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2m15 7H6V7h12m0 6H6v-2h12m0 6H6v-2h12v2z",
           value:null,
+          url:"/client"
         },
         {
           text:"Reserver une Table",
@@ -105,13 +132,17 @@ export default {
           round:false,
           width:"w-12",
           height:"h-12",
+          url:"/reservation",
           icon:"M18 11h-3v3h-2v-3h-3V9h3V6h2v3h3m2-5v12H8V4h12m0-2H8c-1.1 0-2 .9-2 2v12a2 2 0 0 0 2 2h12c1.11 0 2-.89 2-2V4a2 2 0 0 0-2-2M4 6H2v14a2 2 0 0 0 2 2h14v-2H4V6z"
         },
       ],
       i:0,
       liste_days:calendar.weeks[0],
       now_day:calendar.today.toString().split(" ")[2],
-      existes:[[2,4],[6,2],[31,5],[4,10]],
+      existes:[],
+      taille:calendar.weeks.length,
+      show_popup: false,
+      mois:[[8,9,10,11,12],[1,2,3,4,5,6,7,8,9,10,11,12]]
     }
   },
   methods:{
@@ -119,17 +150,28 @@ export default {
       return item.date.toString().split(" ")[0]
     },
     suivant(){
-      this.i++
-      this.liste_days=calendar.weeks[this.i]
+      document.getElementById('kinda').classList.add('animer_')
+      setTimeout(() => {
+        document.getElementById('kinda').classList.remove('animer_')
+        this.i++
+        this.liste_days=calendar.weeks[this.i]
+        console.log(this.liste_days)
+      }, 300);
+
     },
     precedant(){
-      this.i--
-      this.liste_days=calendar.weeks[this.i]
+      document.getElementById('kinda').classList.add('animer_')
+      setTimeout(() => {
+        document.getElementById('kinda').classList.remove('animer_')
+        this.i--
+        this.liste_days=calendar.weeks[this.i]
+      }, 300);
     },
-    get_child(day,hours){
+    get_child(day,hours,month){
+      
       for (let i = 0; i < this.existes.length; i++) {
         const element = this.existes[i];
-        if(element[0]==day && element[1]==hours){
+        if(element[0]==day && element[1]==hours && this.mois[0][element[2]]==month){
           return true
         }
       }
@@ -147,9 +189,22 @@ export default {
         }
       }
       return temp.length
+    },
+    log_out(){
+      this.$store.state.data.user.logged=false
+      window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
+      this.show_popup=false
     }
   }, 
   mounted(){
+    var array_temps=this.$store.state.data.clients; 
+    for (let i = 0; i < array_temps.length; i++) {
+      const element = array_temps[i];
+      //console.log(element.jours,element.heure)
+      this.existes.push([element.jours,element.heure-1,element.moi])
+    }
+    //console.log(calendar.weeks[4][1].date.toString().split(" ")[1])
+   
   }
 }
 </script>
@@ -176,5 +231,28 @@ export default {
 }
 .my_hover:hover{
   background: rgba(128, 128, 128, 0.233);
+}
+.animer_{
+  animation:anims .4s backwards ;
+}
+@keyframes anims {
+  0%{
+    opacity:1;
+  }
+  50%{
+    opacity:0;
+  }
+  60%{
+    opacity:0;
+  }
+  100%{
+    opacity:1;
+  }
+}
+
+.blures {
+  transition: 0.4ms;
+  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.24);
 }
 </style>
