@@ -49,7 +49,13 @@
           <td  v-for="item,i in liste_days" :key="i" class=" h-full" >
             <div  :class="now_day==item.day?' bg-blue-200 ':'bg-gray-100 '" class="   flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
               <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h</span>
-              <span v-if="get_child(item.day,l,item.monthIndex+1)==true" class=" px-2 py-1 text-white rounded-l-md flex bg-orange-600 w-full uppercase font-medium text-xs" >Reservé</span>
+              <div v-if="get_child(item.day,l,item.monthIndex+1)[0]==true" class=" px-2 py-1 text-white rounded-l-md flex bg-orange-600  text-xs">
+                <div class="-mt-4  ">
+                  
+              <span  class="  relative  -ml-4 px-1 rounded-full bg-red-500 border border-white" >{{get_child(item.day,l,item.monthIndex+1)[1]}}   </span>
+                </div>
+              <span >Reservé   </span>
+              </div>
               <span v-else :class="now_day==item.day?' px-3 text-white ':'bg-gray-100 text-stone-300'" >Libre</span>
             </div>
           </td>
@@ -168,14 +174,16 @@ export default {
       }, 300);
     },
     get_child(day,hours,month){
-      
+      var k=0;
+      var l=false
       for (let i = 0; i < this.existes.length; i++) {
         const element = this.existes[i];
         if(element[0]==day && element[1]==hours && this.mois[0][element[2]]==month){
-          return true
+          l=true
+          k++;
         }
       }
-     return false
+      return [l,k] 
     },
     set_number(value){
       var res= this.$store.state.data.clients;
@@ -200,10 +208,8 @@ export default {
     var array_temps=this.$store.state.data.clients; 
     for (let i = 0; i < array_temps.length; i++) {
       const element = array_temps[i];
-      //console.log(element.jours,element.heure)
       this.existes.push([element.jours,element.heure-1,element.moi])
     }
-    //console.log(calendar.weeks[4][1].date.toString().split(" ")[1])
    
   }
 }
