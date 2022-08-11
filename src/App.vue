@@ -1,6 +1,6 @@
 <template>
-  <div v-if="this.$store.state.data.user.logged==true" class="flex flex-row h-screen w-screen  overflow-hidden">
-    <nav_bar  class=" overflow-hidden z-40 w-2/4 md:w-2/6 lg:w-1/5 "/>
+  <div v-if="this.$store.state.data.user.logged==true" class="flex flex-row h-screen w-screen  overflow-x-hidden">
+    <nav_bar  class=" overflow-x-hidden z-40 w-2/4 md:w-2/6 lg:w-1/5 "/>
     <div class=" z-20 w-3/4 lg:w-4/5 xl:w-full md:w-4/5 h-full flex flex-col">  
       <router-view class=" bg-gray-200 w-full"/>
       <div class="shadowing footer items-center  bg-white flex justify-center py-5">
@@ -29,7 +29,7 @@
             </div>
             <div class="flex w-72  flex-col ml-10">
                 <div class=" mb-4 flex flex-col"  >
-                    <span class="  text-stone-600">Votre de mots de passe</span>
+                    <span class="  text-stone-600">Votre mots de passe</span>
                     <input  v-model="pwd" autocomplete="none"  type="password"  class=" rounded-lg px-5 py-1 border border-stone-400 text-gray-800 outline-none  focus:border-green-500" >
                 </div>
             </div>

@@ -21,7 +21,7 @@
             <span class=" text-6xl mb-4 text-amber-500 font-medium">Bienvenue à vous Chère utilisateur</span>
             <span class=" text-xl text-gray-400 font-bold">Rerseravation du table 1.0.0</span>
             
-            <router-link class=" mt-5 font-bold text-xl py-2 mb-4 bg-green-500 px-14 uppercase rounded-full text-white" to="/home">Commeçons</router-link>
+            <router-link class=" mt-5 font-bold text-xl py-2 mb-4 bg-green-500 px-14 uppercase rounded-full text-white" to="/home">commençons</router-link>
           </div>
         </div>
         <div class="flex justify-center">

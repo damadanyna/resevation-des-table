@@ -15,13 +15,13 @@
             <svg :class="show_popup == true ? 'transform scale-150 ' : ''" class="w-4" viewBox="0 0 24 24" >
               <path d="M19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-8.92 12.58L11.5 17l5-5-5-5-1.42 1.41L12.67 11H3v2h9.67l-2.59 2.58z" />
             </svg>
-            <span :class=" show_popup == true ? 'transform scale-125 text-white ' : ''" class="text-xs" >Wahababdely</span >
+            <span :class=" show_popup == true ? 'transform scale-125 text-white ' : ''" class="text-xs" >wahababdel</span >
           </div>
         </div>
       </div>
     </div> 
-    <div class="flex h-full w-full bg-gray-200">
-      <div class="flex w-full py-4 px-12 justify-end flex-col-reverse max_defined">
+    <div class="flex w-full bg-gray-200 h-full">
+      <div class="flex w-full py-4 px-12  justify-end flex-col-reverse max_defined overflow-y-auto">
         <div v-for="(user, i) in this.$store.state.data.clients"  :key="i" >
           <div  v-if="user.etat!=this.$store.state.params" class="hover:bg-white duration-150 group flex flex-row my-2 items-center transform hover:scale-105 justify-between bg-gray-100 rounded-full px-5 py-2" >
               <div class="flex flex-row">
@@ -37,7 +37,9 @@
                 </div>
                 <div class="flex flex-col">
                   <span class="group-hover:text-green-600 text-black text-lg font-semibold ml-2" >{{ user.nom + " " + user.prenom }}</span>
-                  <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2">{{ "Le "+user.jours+' '+this.mois[user.anne][user.moi]+" "+this.annee[user.anne]+" à " +heure[user.heure-1]+'H:00, '+" Tél: "+user.numTel }}</span>
+                  <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2">{{ "Le "+user.jours+' '+this.mois[user.anne][user.moi]+" "+this.annee[user.anne]+" à " +heure[user.heure-1]+'H:00, '+" Tél: "+user.numTel+", "}} 
+                  <span class=" text-green-500 text-xs font-bold">Nbr: {{user.nombre}}</span> 
+                 </span>
                 </div>
               </div>
               <div  class=" flex">
@@ -218,6 +220,5 @@ export default {
 }
 .max_defined{
   max-height: 75vh;
-  overflow-y: auto;
 }
 </style>

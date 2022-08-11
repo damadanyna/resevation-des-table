@@ -60,9 +60,8 @@
                       <span>Type de reservation</span>
                       <select v-model="ind_res_type" class=" px-9 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
                         <option value=""></option>
-                        <option value="VIP">VIP</option>
-                        <option value="CLASSQUE">CLASSQUE</option>
-                        <option value="BASSIQUE">BASSIQUE</option>
+                        <option value="UNIQUE">UNIQUE</option>
+                        <option value="SALLE">SALLE</option>
                       </select>
               </div>
               <div class=" mb-4 flex flex-col" >
