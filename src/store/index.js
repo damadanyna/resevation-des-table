@@ -25,6 +25,8 @@ export default createStore({
             nombre:"",
             type_reservation:"",
             etat:true,
+            table:true,
+            num_table:null,
           },
       ],
     },

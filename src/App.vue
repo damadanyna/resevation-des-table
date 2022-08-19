@@ -68,6 +68,7 @@ export default {
           this.errone=false
           this.$store.state.data.user.logged=true
           window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
+          console.log(JSON.stringify(this.$store.state.data))
           this.name=""
           this.pwd=""
         }else{
@@ -82,12 +83,11 @@ export default {
     msg: String
   },
   mounted(){
-    
-    if(window.localStorage.getItem('mi')){
+    /* if(this.$store.state.data.length<=window.localStorage.getItem('mi').length ){ */
       this.$store.state.data=JSON.parse(window.localStorage.getItem('mi'))
-    }else if(!window.localStorage.getItem('mi')){
+    /* }else if(window.localStorage.getItem('mi').length< this.$store.state.data.length){
       window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
-    }
+    } */
   }
 }
 </script>

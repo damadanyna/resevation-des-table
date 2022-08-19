@@ -21,8 +21,8 @@
       </div>
     </div> 
     <div class="flex w-full bg-gray-200 h-full">
-      <div class="flex w-full py-4 px-12  justify-end flex-col-reverse max_defined overflow-y-auto">
-        <div v-for="(user, i) in this.$store.state.data.clients"  :key="i" >
+      <div v-if="this.$store.state.data.clients.length>0" class="flex w-full py-4 px-12  justify-end flex-col-reverse max_defined overflow-y-auto">
+        <div v-for="user, i in this.$store.state.data.clients"  :key="i" >
           <div  v-if="user.etat!=this.$store.state.params" class="hover:bg-white duration-150 group flex flex-row my-2 items-center transform hover:scale-105 justify-between bg-gray-100 rounded-full px-5 py-2" >
               <div class="flex flex-row">
                 <div  v-if="user.etat==true" class="border border-green-500 bg-green-500 group-hover:bg-red-500 group-hover:border-white rounded-full" >
@@ -35,12 +35,21 @@
                     <path class="fill-current text-white" d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4z"/>
                   </svg>
                 </div>
+
                 <div class="flex flex-col">
-                  <span class="group-hover:text-green-600 text-black text-lg font-semibold ml-2" >{{ user.nom + " " + user.prenom }}</span>
-                  <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2">{{ "Le "+user.jours+' '+this.mois[user.anne][user.moi]+" "+this.annee[user.anne]+" à " +heure[user.heure-1]+'H:00, '+" Tél: "+user.numTel+", "}} 
-                  <span class=" text-green-500 text-xs font-bold">Nbr: {{user.nombre}}</span> 
-                 </span>
+                  <div>
+                    <span class="group-hover:text-green-600 text-black text-lg font-semibold ml-2" v-text="user.nom" ></span>
+                    <span class="group-hover:text-green-600 text-black text-lg font-semibold ml-2" v-text="user.prenom" ></span>
+                  </div>
+                  <div >
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.jours!=''?'Le '+user.jours:''"></span> 
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.anne!='' && user.moi!=''? mois[user.anne][user.moi]:' '"></span> 
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.anne!=''?annee[user.anne]+' à ':''"></span> 
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.heure!='' && user.numTel!=''?heure[user.heure-1]+'H:00,  Tél: '+user.numTel :''"></span> 
+                    <span class=" text-green-500 text-xs font-bold" v-text=" user.nombre!=''? 'Nbr'+user.nombre:''"></span> 
+                  </div>
                 </div>
+
               </div>
               <div  class=" flex">
                 <div @click="set_cancel(i)" v-if="user.etat==true">
@@ -77,6 +86,9 @@
               </div>
           </div>
         </div>
+      </div>
+      <div v-else  class="flex w-full h-full items-center py-4 px-12  justify-center flex-row max_defined overflow-y-auto">
+        <span class=" text-5xl font-bold text-gray-400">Client Vide</span>
       </div>
     </div>
   </div>
@@ -176,6 +188,8 @@ export default {
   },
   mounted() {
     //this.search('DANY')
+    /* console.log(this.$store.state.data.clients) */
+    console.log('teste')
   },
 };
 </script>

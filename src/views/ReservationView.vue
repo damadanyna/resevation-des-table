@@ -25,28 +25,28 @@
               <div class=" mb-4 flex flex-col" >
                   <span class="  text-stone-600"></span>
                       <span>Année</span>
-                      <select v-model="ind_anne" class=" px-3 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
-                        <option v-for="item,i in this.calendrier" :key="i" v-text="item[0]" :value="i"></option>
+                      <select v-model="id_annee" class=" px-3 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
+                        <option v-for="item,i in annee" :key="i" v-text="item" :value="item"></option>
                       </select>
               </div>
-              <div class=" mb-4 flex flex-col" >
-                  <div class=" flex flex-row">
-                    <div >
-                      <span>Heure:</span>
+              <div class=" mb-4 flex " >
+                  <div  class=" justify-between w-full  flex flex-row">
+                    <div class=" w-full flex flex-col" >
+                      <span class="">Mois:</span>
+                      <select v-model="id_mois" class=" px-3 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
+                        <option v-for="item,i in set_moi_list(id_annee,this.mois) "  :value="item" v-text="item" :key="i"></option>
+                      </select>
+                    </div>
+                    <div class=" w-full flex flex-col px-4" >
+                      <span class="">Jour:</span>
+                      <select v-model="ind_jour" class=" px-3 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
+                        <option v-for="item,i in  set_jour_list(new Date(id_annee,index(id_mois,this.mois),1))" :key="i" v-text="item" :value="item"></option>
+                      </select>
+                    </div>
+                    <div class=" w-full flex flex-col" >
+                      <span class="">Heure:</span>
                       <select v-model="ind_heur" class=" px-1 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
                         <option v-for="i in 16" :key="i" :value="i" v-text="i+5 +'H'"></option>
-                      </select>
-                    </div>
-                    <div >
-                      <span>Jour:</span>
-                      <select v-model="ind_jour" class=" px-3 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
-                        <option v-for="item,i in  this.calendrier[ind_anne][1][0][ind_mois][1]" :key="i" v-text="item" :value="item"></option>
-                      </select>
-                    </div>
-                    <div  class=" ml-5">
-                      <span>Mois:</span>
-                      <select v-model="ind_mois" class=" px-3 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
-                        <option v-for="item,i in  this.calendrier[ind_anne][1][0]"  :value="i" v-text="mois[item[0]-1]" :key="i"></option>
                       </select>
                     </div>
                   </div>
@@ -58,14 +58,14 @@
               <div class=" mb-4 flex flex-col" >
                   <span class="  text-stone-600"></span>
                       <span>Type de reservation</span>
-                      <select v-model="ind_res_type" class=" px-9 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
+                      <select @change="ind_nbr=''" v-model="ind_res_type" class=" px-9 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
                         <option value=""></option>
-                        <option value="UNIQUE">UNIQUE</option>
-                        <option value="SALLE">SALLE</option>
+                        <option value="UNIQUE">Famille</option>
+                        <option value="SALLE">Unique</option>
                       </select>
               </div>
               <div class=" mb-4 flex flex-col" >
-                  <span class="  text-stone-600">Nombre de personne</span>
+                  <span class="  text-stone-600">Table Disponible</span>
                   <input v-model="ind_nbr" type="number" class=" rounded-lg px-5 py-1 border border-stone-400 text-gray-800 outline-none  focus:border-green-500" >
               </div>
           </div>
@@ -106,9 +106,7 @@
 
 <script>
 // @ is an alias to /src
-const {JsonCalendar}=require('json-calendar')
-const calendar=new JsonCalendar()
-
+const date = new Date()
 export default {
 
   components: {
@@ -145,17 +143,22 @@ export default {
       ],
       temp:[],
       i:4,
-      liste_days:calendar.weeks[4],
       tableau_principale:[],
       calendrier:[],
-      ind_anne:0,
-      ind_mois: 0,
+      id_annee:date.getFullYear(),
+      id_mois: 0,
       ind_jour: "",
       ind_heur: "",
       ind_nbr:"",
       type_clie:"",
       ind_res_type:"",
       mois:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Aôut','Septembre','Octobre','Novembre','Décembre'],
+      table:[
+        [1,2,3,4,5,6,],
+        []
+      ],
+      annee:[2022,2023],
+      jours:[]
     }
   },
   methods:{
@@ -169,8 +172,8 @@ export default {
             sexe:this.temp[2].value,
             addresse :this.temp[3].value,
             numTel :this.temp[4].value,
-            anne:this.ind_anne,
-            moi:this.ind_mois,
+            anne:this.id_annee,
+            moi:this.id_mois,
             jours:this.ind_jour,
             heure:this.ind_heur,
             type_client:this.type_clie,
@@ -215,53 +218,48 @@ export default {
       window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
       this.show_popup=false
     },
-    init_date(){
-      for (let index = 0; index < calendar.weeks.length; index++) {
-        const element = calendar.weeks[index];
-        for (let k = 0; k < element.length; k++) {
-          const lambda = element[k];
-          this.tableau_principale.push(lambda)
+    index(index,mois){
+      for (let i = 0; i < mois.length; i++) {
+        const element = mois[i];
+        if(element==index){
+          return i
         }
-      }
-      /* decoupage du grand tableay pour les divise en annee */
-      var temp_1=[[2022,[]],[2023,[]]]
-      for (let i = 0; i < this.tableau_principale.length; i++) {
-        const element = this.tableau_principale[i];
-        var tem=element.monthIndex+1
-        if(element.year==2022){
-          if(!temp_1[0][1].includes(tem)){
-            temp_1[0][1].push(tem)
-          }
-        }else{
-          if(!temp_1[1][1].includes(tem)){
-            temp_1[1][1].push(tem)
-          }
-        }
-      }
-      
-      for (let q = 0; q < temp_1.length; q++) {
-       var temp_moi=[]
-        for (let k = 0; k < temp_1[q][1].length-1; k++) {
-          const elmt = temp_1[q][1][k];
-          var arr_=[]
-          for (let i = 0; i < this.tableau_principale.length; i++) {
-            const elt = this.tableau_principale[i];
-            if(elmt==elt.monthIndex+1 && !arr_.includes(elt.day)){
-              arr_.push(elt.day)
-            }
-          }
-          temp_moi.push([elmt,arr_])
-        }
-        this.calendrier.push([temp_1[q][0],[temp_moi]])
+        
       }
     },
-  
+    set_moi_list(annee,mois){
+      var  moi=[]
+        if(annee==date.getFullYear()){
+          for (let i = date.getMonth(); i < mois.length; i++) {
+            const element = mois[i];
+            moi.push(element)
+          }
+        }else{
+          return mois
+        }
+        return moi;
+    },
+    set_jour_list(annee){
+      var annees=new Date()
+      if(date.getFullYear()==annee.getFullYear() && date.getMonth()==annee.getMonth()){
+       annees=new Date(date.getFullYear(),date.getMonth(),date.getDate())
+      }else{
+       annees=new Date(annee.getFullYear(),annee.getMonth(),1)
+      }
+      var a=annees.getMonth()
+      const dates=[]
+      while( annees.getMonth()===a){
+         dates.push(new Date(annees).getDate())
+        annees.setDate(annees.getDate()+1)
+      }
+      return dates
+    },
   },
   mounted(){
+    
+    //console.log(this.algorithme2(this.id_annee+'-'))
   },
   created(){
-
-    this.init_date()
   }
 }
 </script>

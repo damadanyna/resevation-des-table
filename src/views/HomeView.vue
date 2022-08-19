@@ -37,7 +37,7 @@
       <table id="kinda">
         <tr>
           <th v-for="item,i in liste_days" :key="i">
-            <div :class="now_day==item.day?' font-bold text-xl py-0 bg-blue-200':' py-1 font-medium  bg-gray-100'" class=" w-36   px-2 ml-9 margining" >
+            <div @click="checked_date(item.day)" :class="now_day==item.day?' font-bold text-xl py-0 bg-blue-200':' py-1 font-medium  bg-gray-100'" class=" cursor-pointer w-36   px-2 ml-9 margining" >
               <div class="flex w-full justify-end ">
                 <span class=" text-green-600 ml-9 text-sm  rounded-full  ">{{item.day<10?"0"+item.day:item.day}}</span>
               </div>
@@ -47,7 +47,7 @@
         </tr>
         <tr  v-for="items,l in 16" :key="l">
           <td  v-for="item,i in liste_days" :key="i" class=" h-full" >
-            <div  :class="now_day==item.day?' bg-blue-200 ':'bg-gray-100 '" class="   flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
+            <div  :class="now_day==item.day?' bg-blue-200 ':'bg-gray-100 '" class="  cursor-pointer   flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
               <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h</span>
               <div v-if="get_child(item.day,l,item.monthIndex+1)[0]==true" class=" px-2 py-1 text-white rounded-l-md flex bg-orange-600  text-xs">
                 <div class="-mt-4  ">
@@ -83,14 +83,21 @@
       </div>
     </div>
   </div>
+  
+  <tableview v-if="this.$store.state.data.clients.table" class=" absolute z-50 h-full w-full"  />
 </template>
 
 <script>
 // @ is an alias to /src
 const {JsonCalendar}=require('json-calendar')
 const calendar=new JsonCalendar()
+import tableview from '../views/TableView.vue'
+
+const date = new Date()
+
 export default {
   components: {
+    tableview
   },
   data(){
     return{
@@ -148,7 +155,7 @@ export default {
       existes:[],
       taille:calendar.weeks.length,
       show_popup: false,
-      mois:[[8,9,10,11,12],[1,2,3,4,5,6,7,8,9,10,11,12]]
+      mois:[[8,9,10,11,12],[1,2,3,4,5,6,7,8,9,10,11,12]],
     }
   },
   methods:{
@@ -202,7 +209,24 @@ export default {
       this.$store.state.data.user.logged=false
       window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
       this.show_popup=false
-    }
+    },
+    checked_date(a){
+      //console.log(liste_days[1].date.toString().split(" ")[1] +" "+liste_days[1].date.toString().split(" ")[3])
+      console.log(a)
+    },
+    
+    set_moi_list(annee,mois){
+      var  moi=[]
+        if(annee==date.getFullYear()){
+          for (let i = date.getMonth(); i < mois.length; i++) {
+            const element = mois[i];
+            moi.push(element)
+          }
+        }else{
+          return mois
+        }
+        return moi;
+    },
   }, 
   mounted(){
     var array_temps=this.$store.state.data.clients; 
