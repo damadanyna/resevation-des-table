@@ -43,10 +43,10 @@
                   </div>
                   <div >
                     <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.jours!=''?'Le '+user.jours:''"></span> 
-                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.anne!='' && user.moi!=''? mois[user.anne][user.moi]:' '"></span> 
-                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.anne!=''?annee[user.anne]+' à ':''"></span> 
-                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.heure!='' && user.numTel!=''?heure[user.heure-1]+'H:00,  Tél: '+user.numTel :''"></span> 
-                    <span class=" text-green-500 text-xs font-bold" v-text=" user.nombre!=''? 'Nbr'+user.nombre:''"></span> 
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text=" user.moi!=''? user.moi:' '"></span> 
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.anne!=''?user.anne+' à ':''"></span> 
+                    <span class="group-hover:text-gray-600 text-gray-400 text-xs font-semibold ml-2" v-text="user.heure!='' && user.numTel!=''?heure[user.heure-1]+'H:00,  Tél: '+user.numTel +', ':''"></span> 
+                    <span class=" text-green-500 text-xs font-bold" v-text=" user.nombre!=''? ' Table N°: '+user.nombre:''"></span> 
                   </div>
                 </div>
 
@@ -184,6 +184,9 @@ export default {
       }else{
         this.$store.state.data.clients=this.client_temp
       }
+    },
+    indexed(user){
+      return this.mois.indexOf(user)
     }
   },
   mounted() {

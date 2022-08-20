@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full h-full">
+  <div v-if="!this.$store.state.table" class="flex flex-col z-10 w-full h-full">
     <div class="flex w-full flex-col bg-white z-30 shadow-lg ">
       <div class=" py-5"></div>
       <div class=" px-3 flex flex-row py-2 justify-between">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class=" flex w-full justify-end z-50">
-      <span class=" bg-green-500 rounded-b-xl text-white py-1 text-3xl px-6">{{liste_days[1].date.toString().split(" ")[1] +" "+liste_days[1].date.toString().split(" ")[3]}}</span>
+      <span class=" bg-green-500 rounded-b-xl text-white py-1 text-3xl px-6" v-text="date_now"></span>
     </div>
     <div class="  justify-center flex w-full text-3xl pb-5 text-gray-500">
       <div class=" flex flex-row justify-between w-full px-11  mt-3 mr-5">
@@ -28,40 +28,40 @@
                 </div>
               </div>
           </router-link>
+        </div>
       </div>
-    </div>
-      <div  v-if="i>0" @click="precedant()" class=" absolute top_left transform cursor-pointer hover:scale-150 my_hover">
+      <div  v-if="index>0" @click="precedant()" class=" absolute top_left transform cursor-pointer hover:scale-150 my_hover">
           <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m14 7-5 5 5 5V7z" /></svg>
       </div>
       <div class=" w-full flex justify-center px-5 h-fulls overflow-y-auto ">
       <table id="kinda">
         <tr>
-          <th v-for="item,i in liste_days" :key="i">
-            <div @click="checked_date(item.day)" :class="now_day==item.day?' font-bold text-xl py-0 bg-blue-200':' py-1 font-medium  bg-gray-100'" class=" cursor-pointer w-36   px-2 ml-9 margining" >
+          <th v-for="item,i in list_days" :key="i">
+            <div :class="jour_now==item[1]?' font-bold text-xl py-0 bg-blue-200':' py-1 font-medium  bg-gray-100'" class="  w-36   px-2 ml-9 margining" >
               <div class="flex w-full justify-end ">
-                <span class=" text-green-600 ml-9 text-sm  rounded-full  ">{{item.day<10?"0"+item.day:item.day}}</span>
+                <span :class="item[1]==0?'opacity-0':'opacity-100'" class="  text-green-600 ml-9 text-sm  rounded-full  " v-text="item[1]<10?'0'+item[1]:item[1]"></span>
               </div>
-              <span :class="now_day==item.day?' text-3xl ':'text-xl '" class="text-blue-600   ">{{get_text(item)}}</span>
+              <span :class="jour_now==item[1]?' text-3xl ':'text-xl '" class="text-blue-600   " v-text="item[0]"></span>
             </div>
           </th>
         </tr>
-        <tr  v-for="items,l in 16" :key="l">
-          <td  v-for="item,i in liste_days" :key="i" class=" h-full" >
-            <div  :class="now_day==item.day?' bg-blue-200 ':'bg-gray-100 '" class="  cursor-pointer   flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
-              <span class=" flex justify-end text-gray-700 text-xs px-4">{{l+6}}h</span>
-              <div v-if="get_child(item.day,l,item.monthIndex+1)[0]==true" class=" px-2 py-1 text-white rounded-l-md flex bg-orange-600  text-xs">
+        <tr  v-for="items,l in 16" :key="l"  >
+          <td  v-for="item,i in list_days" :key="i" class=" h-full"  @click="get_childs(item[1], this.id_mois)[0]==true?checked_date(item[1], this.id_mois,id_annee):''" :class="get_childs(item[1], this.id_mois)[0]==true?'cursor-pointer':''" >
+            <div  :class="jour_now==item[1]?' bg-blue-200 ':'bg-gray-100 '" class="     flex w-full flex-col bg-gray-100 ml-2 margining py-1" >
+              <span class=" flex justify-end text-gray-700 text-xs px-4" v-text="item[1]==0?'00 h':l+6+' h'" ></span>
+              
+              <div v-if="get_child(item[1],l-6, this.id_mois)[0]==true" class=" px-2 py-1 text-white rounded-l-md flex bg-orange-600  text-xs">
                 <div class="-mt-4  ">
-                  
-              <span  class="  relative  -ml-4 px-1 rounded-full bg-red-500 border border-white" >{{get_child(item.day,l,item.monthIndex+1)[1]}}   </span>
-                </div>
-              <span >Reservé   </span>
+                  <span  class="  relative  -ml-4 px-1 rounded-full bg-red-500 border border-white" >{{get_child(item[1],l-6,this.id_mois)[1]}}   </span>
+                    </div>
+                  <span >Reservé   </span>
               </div>
-              <span v-else :class="now_day==item.day?' px-3 text-white ':'bg-gray-100 text-stone-300'" >Libre</span>
+              <span v-else :class="jour_now==item[1]?' px-3 text-white ':'bg-gray-100 text-stone-300'" v-text="item[1]==0?'Expiré':'Libre'" ></span>
             </div>
           </td>
         </tr>
       </table>
-        <div v-if="i<taille" @click="suivant()"  class=" absolute top_right transform cursor-pointer hover:scale-150 my_hover">
+        <div @click="suivant()"  class=" absolute top_right transform cursor-pointer hover:scale-150 my_hover">
           <svg class=" w-14" viewBox="0 0 24 24"><path  class=" fill-current bg-gray-900" d="m10 17 5-5-5-5v10z" /></svg>
         </div>
       </div>
@@ -83,14 +83,11 @@
       </div>
     </div>
   </div>
-  
-  <tableview v-if="this.$store.state.data.clients.table" class=" absolute z-50 h-full w-full"  />
+  <tableview v-if="this.$store.state.table" class=" top-0 absolute z-50 bg-white h-full w-full"  />
 </template>
 
 <script>
-// @ is an alias to /src
-const {JsonCalendar}=require('json-calendar')
-const calendar=new JsonCalendar()
+// @ is an alias to /sr
 import tableview from '../views/TableView.vue'
 
 const date = new Date()
@@ -150,25 +147,62 @@ export default {
         },
       ],
       i:0,
-      liste_days:calendar.weeks[0],
-      now_day:calendar.today.toString().split(" ")[2],
+      list_days:[],
+      now_day:0,
       existes:[],
-      taille:calendar.weeks.length,
       show_popup: false,
-      mois:[[8,9,10,11,12],[1,2,3,4,5,6,7,8,9,10,11,12]],
+      mois:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Aôut','Septembre','Octobre','Novembre','Décembre'],
+      liste_mois:[],
+      date_now:0,
+      id_annee:0,
+      id_mois:0,
+      jour_now:0,
+      index:0,
     }
   },
   methods:{
-    get_text(item){
-      return item.date.toString().split(" ")[0]
+    set_moi_list(annee){
+      var  moi=[]
+        if(annee==date.getFullYear()){
+          for (let i = date.getMonth(); i < this.mois.length; i++) {
+            const element = this.mois[i];
+            moi.push(element)
+          }
+        }else{
+          return this.mois
+        }
+        return moi;
+    },
+
+    arrager_jours(position){
+      var days_array=[['Lun',0],['Mar',0],['Mer',0],['Jeu',0],['Vend',0],['Sam',0],['Dim',0]];
+      var j=0; 
+      var global_date=new Date(date.getFullYear(),date.getMonth()+1,((-(date.getDay()-1)+7)-date.getDate()) +j+position)  
+
+      this.date_now=global_date.getDate()+' '+
+              this.mois[global_date.getMonth()]+' ' +
+              global_date.getFullYear()
+      for (let i = 0; i < days_array.length; i++) {
+        if(position==0){
+          if(i>=date.getDay()-1 && date.getMonth()){
+            days_array[i][1]=new Date(date.getFullYear(),date.getMonth(),date.getDate()+j+position).getDate()
+            j++
+          }
+        }else{
+            days_array[i][1]=new Date(date.getFullYear(),date.getMonth()+1,((-(date.getDay()-1)+7)-date.getDate()) +j+position) .getDate()
+            j++
+        }
+      }
+     this.id_mois=global_date.getMonth()
+     this.id_annee=global_date.getFullYear()
+      return days_array;
     },
     suivant(){
       document.getElementById('kinda').classList.add('animer_')
       setTimeout(() => {
         document.getElementById('kinda').classList.remove('animer_')
-        this.i++
-        this.liste_days=calendar.weeks[this.i]
-        console.log(this.liste_days)
+        this.index+=7
+        this.list_days=this.arrager_jours(this.index)
       }, 300);
 
     },
@@ -176,8 +210,8 @@ export default {
       document.getElementById('kinda').classList.add('animer_')
       setTimeout(() => {
         document.getElementById('kinda').classList.remove('animer_')
-        this.i--
-        this.liste_days=calendar.weeks[this.i]
+        this.index-=7
+        this.list_days=this.arrager_jours(this.index)
       }, 300);
     },
     get_child(day,hours,month){
@@ -185,13 +219,26 @@ export default {
       var l=false
       for (let i = 0; i < this.existes.length; i++) {
         const element = this.existes[i];
-        if(element[0]==day && element[1]==hours && this.mois[0][element[2]]==month){
+        var temp=element[1]-6;
+        if((element[0]==day) && (this.mois.indexOf(element[2])==month) && temp==hours){
           l=true
-          k++;
+          k++
+          }
         }
-      }
-      return [l,k] 
-    },
+        return [l,k] 
+      },
+      get_childs(day,month){
+        var k=0;
+        var l=false
+        for (let i = 0; i < this.existes.length; i++) {
+          const element = this.existes[i];
+          if((element[0]==day) && (this.mois.indexOf(element[2])==month)){
+            l=true
+            k++
+          }
+        }
+        return [l,k] 
+      },
     set_number(value){
       var res= this.$store.state.data.clients;
       var temp=[];
@@ -210,31 +257,37 @@ export default {
       window.localStorage.setItem('mi',JSON.stringify(this.$store.state.data))
       this.show_popup=false
     },
-    checked_date(a){
-      //console.log(liste_days[1].date.toString().split(" ")[1] +" "+liste_days[1].date.toString().split(" ")[3])
-      console.log(a)
+    checked_date(a,b,c){
+      this.$store.state.liste_table=[
+            ['','','','','','','','',],
+            ['','','','','','','','','','']
+          ]
+      this.$store.state.table=true
+      this.$store.state.date_g=[a,this.mois[b],c]
+      this.$store.state.data.clients.forEach(element => {
+        if(element.jours==a && this.mois.indexOf(element.moi)==b && c ==element.anne){
+          var i=element.type_reservation
+            this.$store.state.liste_table[i][element.nombre]=element
+        }
+      });
     },
     
-    set_moi_list(annee,mois){
-      var  moi=[]
-        if(annee==date.getFullYear()){
-          for (let i = date.getMonth(); i < mois.length; i++) {
-            const element = mois[i];
-            moi.push(element)
-          }
-        }else{
-          return mois
-        }
-        return moi;
-    },
   }, 
   mounted(){
+   /* this.mois= this.set_moi_list(2022) */
+   this.id_annee=date.getFullYear()
+   this.id_mois=date.getMonth()
+/* 
+   this.date_now=  this.mois[date.getMonth()]+' ' +this.id_annee */
+   this.jour_now=date.getDate()
+
+   this.list_days=this.arrager_jours(this.index)
     var array_temps=this.$store.state.data.clients; 
     for (let i = 0; i < array_temps.length; i++) {
       const element = array_temps[i];
       this.existes.push([element.jours,element.heure-1,element.moi])
+
     }
-   
   }
 }
 </script>

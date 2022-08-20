@@ -52,21 +52,25 @@
                   </div>
               </div>
               <div class=" mb-4 flex flex-col" >
-                  <span class="  text-stone-600">Type de Client</span>
-                  <input v-model="type_clie"  class=" rounded-lg px-5 py-1 border border-stone-400 text-gray-800 outline-none  focus:border-green-500" >
-              </div>
-              <div class=" mb-4 flex flex-col" >
-                  <span class="  text-stone-600"></span>
-                      <span>Type de reservation</span>
+                  <span class="  text-stone-600">Type de reservation</span>
                       <select @change="ind_nbr=''" v-model="ind_res_type" class=" px-9 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
                         <option value=""></option>
-                        <option value="UNIQUE">Famille</option>
-                        <option value="SALLE">Unique</option>
+                        <option value="1">Famille</option>
+                        <option value="0">Unique</option>
                       </select>
               </div>
               <div class=" mb-4 flex flex-col" >
-                  <span class="  text-stone-600">Table Disponible</span>
-                  <input v-model="ind_nbr" type="number" class=" rounded-lg px-5 py-1 border border-stone-400 text-gray-800 outline-none  focus:border-green-500" >
+                  <span class="  text-stone-600">Type de table</span>
+                      <select v-if="ind_res_type==1" v-model="ind_nbr" class=" px-9 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
+                        <option v-for="i in 8" :value="i" :key="i" v-text="'Table N° '+i +' '"></option>
+                      </select>
+                      <select v-else v-model="ind_nbr" class=" px-9 outline-none focus:border-green-500 rounded-lg py-1 border border-stone-400 mx-1" name="" id="">
+                        <option v-for="i in 10" :value="i" :key="i" v-text="'Table N° '+i +' '"></option>
+                      </select>
+             </div>
+              <div class=" mb-4 flex flex-col" >
+                  <span class="  text-stone-600">Nombre de personne</span>
+                  <input v-model="type_clie" type="number"  class=" rounded-lg px-5 py-1 border border-stone-400 text-gray-800 outline-none  focus:border-green-500" >
               </div>
           </div>
       </div>
@@ -79,7 +83,7 @@
     </div>
   </div>
 
-  <div id="btn_enre" class=" opacity-0 z-0 bg-blue-500 px-12 py-4  flex absolute top-40 right-5 z-50">
+  <div id="btn_enre" class=" opacity-0  bg-blue-500 px-12 py-4  flex absolute top-40 right-5 z-50">
     <svg class=" w-7" viewBox="0 0 24 24"><path class=" fill-current text-white" d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7z" /></svg>
     <span class="text-white">Enregistré</span>
   </div>

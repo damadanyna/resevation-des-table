@@ -27,7 +27,7 @@
         </svg>
         <span class="hidden sm:flex"> Tableau de bord</span>
       </router-link>
-      <router-link
+      <router-link @click="this.$store.state.table=false"
         class="flex-col items-center text-xs font-medium sm:text-base lg:flex-row flex my-2 text-gray-400"
         to="/reservation"
       >
@@ -39,7 +39,7 @@
         </svg>
         <span class="hidden sm:flex">Reservation</span>
       </router-link>
-      <router-link
+      <router-link @click="this.$store.state.table=false"
         class="flex-col items-center text-xs font-medium sm:text-base lg:flex-row flex my-2 text-gray-400"
         to="/client"
       >

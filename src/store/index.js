@@ -16,7 +16,6 @@ export default createStore({
             sexe:"M",
             addresse :"Talatamy",
             numTel :"0349459128",
-            
             anne:"",
             moi:"",
             jours:"",
@@ -25,12 +24,17 @@ export default createStore({
             nombre:"",
             type_reservation:"",
             etat:true,
-            table:true,
             num_table:null,
           },
       ],
     },
+    table:false,
+    date_g:[],
     params:null,
+    liste_table:[
+      ['','','','','','','','',],
+      ['','','','','','','','','','']
+    ]
   },
   getters: {
   },
