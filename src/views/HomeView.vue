@@ -158,6 +158,7 @@ export default {
       id_mois:0,
       jour_now:0,
       index:0,
+      temp:0,
     }
   },
   methods:{
@@ -176,27 +177,40 @@ export default {
 
     arrager_jours(position){
       var days_array=[['Lun',0],['Mar',0],['Mer',0],['Jeu',0],['Vend',0],['Sam',0],['Dim',0]];
-      var j=0; 
-      var global_date=new Date(date.getFullYear(),date.getMonth()+1,((-(date.getDay()-1)+7)-date.getDate()) +j+position)  
+      var nj=0;
 
-      this.date_now=global_date.getDate()+' '+
-              this.mois[global_date.getMonth()]+' ' +
-              global_date.getFullYear()
-      for (let i = 0; i < days_array.length; i++) {
-        if(position==0){
-          if(i>=date.getDay()-1 && date.getMonth()){
-            days_array[i][1]=new Date(date.getFullYear(),date.getMonth(),date.getDate()+j+position).getDate()
-            j++
-          }
-        }else{
-            days_array[i][1]=new Date(date.getFullYear(),date.getMonth()+1,((-(date.getDay()-1)+7)-date.getDate()) +j+position) .getDate()
-            j++
-        }
-      }
-     this.id_mois=global_date.getMonth()
-     this.id_annee=global_date.getFullYear()
+      new Date(date.getFullYear(),date.getMonth(),date.getDate()).getDay()==0?nj=7:''
+      days_array=this.set_day(days_array,nj,position)
+      
+      var global_date=new Date(date.getFullYear(),date.getMonth(),date.getDate()+position-(this.temp)) 
+      this.date_now=global_date.getDate()+' '+ this.mois[global_date.getMonth()]+' ' + global_date.getFullYear()
+      this.id_mois=global_date.getMonth()
+      this.id_annee=global_date.getFullYear()
+      
       return days_array;
     },
+    set_day(array,a,pos){
+      var j=0
+      if(pos==0){
+        for (let i = 0; i < array.length; i++) {
+          if(i<a-1){
+          array[i][1]=0 
+          }else{
+            this.temp=i;
+            array[i][1]=new Date(date.getFullYear(),date.getMonth(),date.getDate()+j).getDate()
+            j++
+          }
+        }
+      }else{
+        for (let i = 0; i < array.length; i++) {
+            array[i][1]=new Date(date.getFullYear(),date.getMonth(),date.getDate()+j+pos-(this.temp)).getDate()
+            j++
+        }
+
+      }
+      return array
+    }
+    ,
     suivant(){
       document.getElementById('kinda').classList.add('animer_')
       setTimeout(() => {
@@ -259,7 +273,7 @@ export default {
     },
     checked_date(a,b,c){
       this.$store.state.liste_table=[
-            ['','','','','','','','',],
+            ['','','','','','','',''],
             ['','','','','','','','','','']
           ]
       this.$store.state.table=true
@@ -267,7 +281,7 @@ export default {
       this.$store.state.data.clients.forEach(element => {
         if(element.jours==a && this.mois.indexOf(element.moi)==b && c ==element.anne){
           var i=element.type_reservation
-            this.$store.state.liste_table[i][element.nombre]=element
+            this.$store.state.liste_table[i][element.nombre-1]=element
         }
       });
     },

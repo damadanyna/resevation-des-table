@@ -35,12 +35,14 @@
                     <div class=" flex flex-row">
                         <div class=" bg-stone-300 w-2 rounded-r-md   mt-3 h-28 shadow-md" style=" margin-right:1px"></div>
                         <div class=" bg-stone-300 w-4 rounded-r-md   mt-3 mr-1 h-28 shadow-md" style=" box-shadow: 0px 10px 19px gray"></div>
+
                         <div @click="table_famille[i]===''?'':set_user(table_famille[i])" :class="table_famille[i]===''?'bg-stone-300':'bg-orange-600 cursor-pointer'" class="   w-24 border-2 border-white h-40 -m-3 rounded-full z-30 flex items-center text-gray-700 justify-center" style=" box-shadow: 0px 7px 26px gray">
                             <span class="  px-3 rounded-full border-2  border-white text-xs font-bold py-1  text-white"> table {{i+1}}</span>
                             <div v-if="table_famille[i]!=''" class=" absolute px-3 border-2 border-white py-1 bg-green-400 rounded-full -mt-14 ml-10">
                                  <span class=" text-white " v-text="table_famille[i]?table_famille[i].type_client:'no'"></span>
                             </div>
                         </div>
+                        
                         <div class=" bg-stone-300 w-4  rounded-l-lg  mt-3 shadow-md ml-1 h-28 z-10 " style=" box-shadow: 0px 10px 19px gray"></div> 
                         <div class=" bg-stone-300 w-2 rounded-l-md   mt-3 h-28 shadow-md" style=" margin-left:1px"></div>
                     </div>
@@ -117,7 +119,7 @@
 
         
     <div @click=" shown=false" v-if="shown==true" class=" absolute top-0 -ml-3  flex flex-row w-full h-full blures justify-center items-center " style=" z-index: 51;">
-        <div class=" bg-white flex flex-col rounded-lg py-4 px-16"> 
+        <div class=" bg-white flex -ml-56 flex-col rounded-lg py-4 px-16"> 
             <div class=" mb-5">
                 <span class=" text-3xl text-stone-600">Propriété</span>
             </div>
@@ -127,15 +129,17 @@
             </div>
             <div class="  flex flex-row">
                 <span>Reserver le:</span>
-                <span class=" ml-5">{{description.jours +' '+description.moi+' '+description.anne}}</span>
+                <span class=" ml-5 mr-1 font-semibold">{{description.jours +' '+description.moi+' '+description.anne}}</span>
+                <span> à </span>
+                <span class="ml-1  font-semibold">{{(description.heure+6) +'h00'}}</span>
             </div>
-            <div class="  flex flex-row">
+            <div class="  flex flex-row text-stone-600 font-medium">
                 <span>Reservation de type</span>
                 <span class=" ml-1">{{description.type_reservation==0?'Unique':'Famille'}}</span>
             </div>
             <div class="  flex flex-row">
                 <span>Table n° </span>
-                <span class=" ml-1">{{description.nombre+1}}</span>
+                <span class=" ml-1">{{description.nombre}}</span>
             </div>
             <div class="  flex flex-row">
                 <span>Nombre de personne:</span>
@@ -143,7 +147,7 @@
                 <span v-else class=" ml-2">{{description.type_client}}</span>
             </div>
             <div class="  flex flex-row">
-                <span>Contacte:</span>
+                <span>Tél:</span>
                 <span class=" ml-2">{{description.numTel}}</span>
             </div>
         </div>
@@ -158,7 +162,7 @@ export default {
         return{
             table_famille:[],
             table_unique:[],
-            shown:true,
+            shown:false,
             description:{}
         }
     },
