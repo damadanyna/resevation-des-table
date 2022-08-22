@@ -131,7 +131,7 @@
                 <span>Reserver le:</span>
                 <span class=" ml-5 mr-1 font-semibold">{{description.jours +' '+description.moi+' '+description.anne}}</span>
                 <span> à </span>
-                <span class="ml-1  font-semibold">{{(description.heure+6) +'h00'}}</span>
+                <span class="ml-1  font-semibold">{{(description.heure+6-1) +'h00'}}</span>
             </div>
             <div class="  flex flex-row text-stone-600 font-medium">
                 <span>Reservation de type</span>
