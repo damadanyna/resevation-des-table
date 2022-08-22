@@ -193,12 +193,14 @@ export default {
       var j=0
       if(pos==0){
         for (let i = 0; i < array.length; i++) {
-          if(i<a-1){
+          if(i<a){
           array[i][1]=0 
           }else{
-            this.temp=i;
             array[i][1]=new Date(date.getFullYear(),date.getMonth(),date.getDate()+j).getDate()
             j++
+          }
+          if(i==a){
+            this.temp=i;
           }
         }
       }else{
