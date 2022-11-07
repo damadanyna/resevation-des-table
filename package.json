@@ -1,7 +1,7 @@
 {
   "name": "my_app_2",
   "version": "0.1.0",
-  "author": "DAMA dany",
+  "author": "Rakotoson Jaspy",
   "private": true,
   "scripts": {
     "start": "node index.js",

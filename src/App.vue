@@ -16,7 +16,7 @@
       <div class="  hidden md:flex mx-6  flex-col justify-center text-center">
         <span class=" text-stone-700 text-7xl animate-bounce">Bienvénue </span>
         <span class=" text-gray-400">Gestion de table version 1.0.0</span>
-        <span class=" text-green-600 text-2xl font-bold" >wahababdel748@gmail.com </span>
+        <span class=" text-green-600 text-2xl font-bold" >jaspyrakotoson@gmail.com </span>
       </div>
       <div class=" flex flex-col mx-32">
             <span class=" text-5xl text-gray-400 mb-8 text-center py-3 font-semibold">Connexion</span>

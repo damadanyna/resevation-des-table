@@ -16,6 +16,7 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 1028,
     height: 600,
+    
     autoHideMenuBar: true,
     webPreferences: {
       

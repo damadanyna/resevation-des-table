@@ -15,7 +15,7 @@
             <svg :class="show_popup == true ? 'transform scale-150 ' : ''" class="w-4" viewBox="0 0 24 24" >
               <path d="M19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-8.92 12.58L11.5 17l5-5-5-5-1.42 1.41L12.67 11H3v2h9.67l-2.59 2.58z" />
             </svg>
-            <span :class=" show_popup == true ? 'transform scale-125 text-white ' : ''" class="text-xs" >wahababdel</span >
+            <span :class=" show_popup == true ? 'transform scale-125 text-white ' : ''" class="text-xs" >Jaspy</span >
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@
   </div>
   <div v-if="show_popup == true" @click="show_popup = false" class="duration-300 z-50 w-full h-full blures absolute top-0 left-0">
     <div class="flex flex-col absolute px-4 py-6 right-3 top-24 justify-between rounded-xl bg-white w-56">
-      <span class="cursor-pointer py-1 text-blue-600 border-b border-gray-400"> wahababdel748@gmail.com</span>
+      <span class="cursor-pointer py-1 text-blue-600 border-b border-gray-400"> jaspyrakotoson@gmail.com</span>
       <router-link class="cursor-pointer py-1 flex flex-row" to="/">
         <svg class="w-7" viewBox="0 0 24 24">
           <path class="fill-current text-slate-500" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
